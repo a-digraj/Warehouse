@@ -51,7 +51,15 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler
-	public ResponseEntity<ResponseStructure<String>> adminAlreadyExists(AdminAlreadyExistsException ex){
+	public ResponseEntity<ResponseStructure<String>> adminAlreadyExists(WarehouseAlreadyExistException ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("warehouse already exists");
+		structure.setStatus(HttpStatus.FORBIDDEN.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.FORBIDDEN);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> warehouseAlreadyExists(AdminAlreadyExistsException ex){
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setData(ex.getMessage());
 		structure.setMessage("admin already exists");
@@ -59,26 +67,62 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.FORBIDDEN);
 	}
 	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> userAlreadyExists(UserAlreadyExistsException ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("user already exists");
+		structure.setStatus(HttpStatus.FORBIDDEN.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.FORBIDDEN);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> findUserByName(UserCredentialsInvalid ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("user credentials invalid");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> findGroceryByName(GroceryNotFoundByName ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("grocery with name not found");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> findProcessedGoodByByName(ProcessedGoodNotFoundByName ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("ProcessedGood with name not found");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> ProcessedGoodsNotFound(ProcessedGoodsNotFound ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("ProcessedGoods not found");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler
 	public ResponseEntity<ResponseStructure<String>> adminnotFound(AdminIdNotFoundException ex){
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setData(ex.getMessage());
-		structure.setMessage("admin already exists");
+		structure.setMessage("admin not found");
 		structure.setStatus(HttpStatus.NOT_FOUND.value());
 		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
 	}
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<ResponseStructure<Object>> handleConstraintViolationException(javax.validation.ConstraintViolationException ex){
-		List<String> errors = new ArrayList<>();
-		for(ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-			errors.add(violation.getMessage());
-		}
-		ResponseStructure<Object> structure = new ResponseStructure<>();
-		structure.setData(errors);
-		structure.setMessage("field validation exception");
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> groceryAlreadyPresent(GroceryAlreadyPresent ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("grocery already exists");
 		structure.setStatus(HttpStatus.BAD_REQUEST.value());
-		
-		return new ResponseEntity<ResponseStructure<Object>>(structure,HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.BAD_REQUEST);
 	}
+	
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -93,6 +137,16 @@ public class ApplicationHandler extends ResponseEntityExceptionHandler{
 		
 		return new ResponseEntity<Object>(hashmap,HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler
+	public ResponseEntity<ResponseStructure<String>> invalidCredentials(AdminCredentialsNotValid ex){
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData(ex.getMessage());
+		structure.setMessage("Admin credentials wrong");
+		structure.setStatus(HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<ResponseStructure<String>>(structure,HttpStatus.NOT_FOUND);
+	}
+	
+	
 	
 	
 }

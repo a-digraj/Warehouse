@@ -9,59 +9,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import lombok.Data;
 @Entity
+@Data
 public class Warehouse {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int warehouseId;
+	@NotNull(message="warehouse address cannot be null")
+	@NotBlank(message="warehouse address cannot be empty")
 	private String warehouseAddress;
+	@Min(value= 6000000000l, message = " phone number must be valid" )
+	@Max(value= 9999999999l, message = " phone number must be valid" )
 	private long warehouseNumber;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<ProcessedGood> processedGoods;
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Grocery> groceries;
-	@OneToOne
-	@NotNull(message = "warehouse must have an admin")
-	@NotEmpty(message = "admin for warehouse cannot be empty")
-	private Admin admin;
-	public int getWarehouseId() {
-		return warehouseId;
-	}
-	public void setWarehouseId(int warehouseId) {
-		this.warehouseId = warehouseId;
-	}
-	public String getWarehouseAddress() {
-		return warehouseAddress;
-	}
-	public void setWarehouseAddress(String warehouseAddress) {
-		this.warehouseAddress = warehouseAddress;
-	}
-	public long getWarehouseNumber() {
-		return warehouseNumber;
-	}
-	public void setWarehouseNumber(long warehouseNumber) {
-		this.warehouseNumber = warehouseNumber;
-	}
-	public List<ProcessedGood> getProcessedGoods() {
-		return processedGoods;
-	}
-	public void setProcessedGoods(List<ProcessedGood> processedGoods) {
-		this.processedGoods = processedGoods;
-	}
-	public List<Grocery> getGroceries() {
-		return groceries;
-	}
-	public void setGroceries(List<Grocery> groceries) {
-		this.groceries = groceries;
-	}
-	public Admin getAdmin() {
-		return admin;
-	}
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
-	}
-	
-	
+	private List<Grocery> groceries;	
 }

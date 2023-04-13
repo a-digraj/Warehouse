@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.tyss.warehouse.boot.warehouse.config.ResponseStructure;
 import com.tyss.warehouse.boot.warehouse.dao.CartDao;
+import com.tyss.warehouse.boot.warehouse.dao.GroceryDao;
+import com.tyss.warehouse.boot.warehouse.dao.ProcessedGoodDao;
+import com.tyss.warehouse.boot.warehouse.dao.UserDao;
 import com.tyss.warehouse.boot.warehouse.entity.Cart;
 import com.tyss.warehouse.boot.warehouse.entity.Grocery;
 import com.tyss.warehouse.boot.warehouse.entity.ProcessedGood;
@@ -19,6 +22,12 @@ import com.tyss.warehouse.boot.warehouse.exception.IdNotFoundException;
 public class CartService {
 	@Autowired
 	private CartDao dao;
+	@Autowired
+	private GroceryDao groceryDao;
+	@Autowired
+	private ProcessedGoodDao processedGoodDao;
+	@Autowired
+	private UserDao userDao;
 
 	public ResponseEntity<ResponseStructure<Cart>> saveCart(Cart cart) {
 		ResponseStructure<Cart> responseStructure = new ResponseStructure<>();
@@ -27,12 +36,12 @@ public class CartService {
 		List<Grocery> groceries = cart.getGroceries();
 		double cost = 0;
 		for (Grocery g : groceries) {
-			cost = cost + (g.getQuantity() * g.getPrice());
+			cost = cost + (g.getQuantity() * g.getGroceryPrice());
 
 		}
-		List<ProcessedGood> pGoods = cart.getProcessedgoods();
+		List<ProcessedGood> pGoods = cart.getProcessedGoods();
 		for (ProcessedGood pgoods : pGoods) {
-			cost = cost + (pgoods.getPrice() * pgoods.getPgoodQuantity());
+			cost = cost + (pgoods.getProcessedGoodPrice() * pgoods.getProcessedGoodQuantity());
 		}
 		cart.setCartCost(cost);
 
@@ -57,6 +66,18 @@ public class CartService {
 	public ResponseEntity<ResponseStructure<Cart>> findCart(int id) {
 		Cart cart2 = dao.findCartById(id);
 		if(cart2!=null) {
+			List<Grocery> groceries = cart2.getGroceries();
+			double cost = 0;
+			for (Grocery g : groceries) {
+				cost = cost + (g.getQuantity() * g.getGroceryPrice());
+
+			}
+			List<ProcessedGood> pGoods = cart2.getProcessedGoods();
+			for (ProcessedGood pgoods : pGoods) {
+				cost = cost + (pgoods.getProcessedGoodPrice() * pgoods.getProcessedGoodQuantity());
+			}
+			cart2.setCartCost(cost);
+			updateCart(cart2, id);
 		ResponseStructure<Cart> responseStructure = new ResponseStructure<>();
 		responseStructure.setData(dao.findCartById(id));
 		responseStructure.setMessage("cart found");
@@ -69,9 +90,10 @@ public class CartService {
 	public ResponseEntity<ResponseStructure<Cart>> deleteCart(int id) {
 		
 		ResponseStructure<Cart> responseStructure = new ResponseStructure<>();
-		Cart cart = dao.deleteCartById(id);
+		Cart cart = dao.findCartById(id);
 		if (cart != null) {
-			responseStructure.setData(cart);
+		
+			responseStructure.setData(dao.deleteCartById(id));
 			responseStructure.setMessage("cart deleted");
 			responseStructure.setStatus(HttpStatus.OK.value());
 			return new ResponseEntity<ResponseStructure<Cart>>(responseStructure, HttpStatus.OK);
@@ -79,6 +101,36 @@ public class CartService {
 			responseStructure.setMessage("cart id not found");
 			responseStructure.setStatus(HttpStatus.NOT_FOUND.value());
 			return new ResponseEntity<ResponseStructure<Cart>>(responseStructure, HttpStatus.NOT_FOUND);
+		}
+	}
+	public ResponseEntity<ResponseStructure<Cart>> addGroceryToCart(int cartId,int groceryId){
+		ResponseStructure<Cart> structure= new ResponseStructure<>();
+		Cart cart = dao.addGroceryToCart(groceryId, cartId);
+		if(cart!=null) {
+			structure.setData(cart);
+			structure.setMessage("grocery added to cart");
+			structure.setStatus(HttpStatus.FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.FOUND);
+		}
+		else {
+			structure.setMessage("cart or grocery not found");
+			structure.setStatus(HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.NOT_FOUND);
+		}
+	}
+	public ResponseEntity<ResponseStructure<Cart>> addProcesseddGoodToCart(int cartId, int processedGoodId){
+		ResponseStructure<Cart> structure = new ResponseStructure<>();
+		Cart cart = dao.addProcessedGoodsToCart(processedGoodId, cartId);
+		if(cart!=null){
+			structure.setData(cart);
+			structure.setMessage("processed goods added");
+			structure.setStatus(HttpStatus.FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.FOUND);
+		}
+		else {
+			structure.setMessage("cart or processed god not found");
+			structure.setStatus(HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.NOT_FOUND);
 		}
 	}
 

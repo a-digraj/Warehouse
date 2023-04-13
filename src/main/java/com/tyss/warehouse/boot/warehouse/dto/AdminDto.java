@@ -1,6 +1,10 @@
 package com.tyss.warehouse.boot.warehouse.dto;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.tyss.warehouse.boot.warehouse.entity.User;
 @Component
 public class AdminDto {
 	

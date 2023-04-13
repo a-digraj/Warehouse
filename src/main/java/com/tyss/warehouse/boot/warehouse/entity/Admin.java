@@ -1,63 +1,40 @@
 package com.tyss.warehouse.boot.warehouse.entity;
 
-import java.util.List;
+
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
+
 @Data
 @Entity
 public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int adminId;
-	@NotNull(message="admin name cannot be null")
+	@NotNull(message = "admin name cannot be null")
+	@NotBlank(message = "admin name cannot be null")
 	private String adminName;
-	@Positive(message = "Value must be positive")
+	@Min(value= 6000000000l, message = " phone number must be valid" )
+	@Max(value= 9999999999l, message = " phone number must be valid" )
 	private long adminPhone;
-	@OneToOne(cascade = CascadeType.ALL,mappedBy = "admin")
+	@NotBlank(message = "Password is required")
+	@Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters")
+	@Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$", message = "must contain at least one letter, one number, one special character")
+	private String adminPassword;
+	@OneToOne(cascade = CascadeType.ALL)
 	private Warehouse warehouse;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<User> users;
-	public int getAdminId() {
-		return adminId;
-	}
-	public void setAdminId(int adminId) {
-		this.adminId = adminId;
-	}
-	public String getAdminName() {
-		return adminName;
-	}
-	public void setAdminName(String adminName) {
-		this.adminName = adminName;
-	}
-	public long getAdminPhone() {
-		return adminPhone;
-	}
-	public void setAdminPhone(long adminPhone) {
-		this.adminPhone = adminPhone;
-	}
-	public Warehouse getWarehouse() {
-		return warehouse;
-	}
-	public void setWarehouse(Warehouse warehouse) {
-		this.warehouse = warehouse;
-	}
-	public List<User> getUsers() {
-		return users;
-	}
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
 	
-	
-	
+
 }

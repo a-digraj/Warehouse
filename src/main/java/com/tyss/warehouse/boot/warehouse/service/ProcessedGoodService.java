@@ -1,5 +1,7 @@
 package com.tyss.warehouse.boot.warehouse.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import com.tyss.warehouse.boot.warehouse.config.ResponseStructure;
 import com.tyss.warehouse.boot.warehouse.dao.ProcessedGoodDao;
 import com.tyss.warehouse.boot.warehouse.entity.ProcessedGood;
 import com.tyss.warehouse.boot.warehouse.exception.IdNotFoundException;
+import com.tyss.warehouse.boot.warehouse.exception.ProcessedGoodNotFoundByName;
+import com.tyss.warehouse.boot.warehouse.exception.ProcessedGoodsNotFound;
 @Service
 public class ProcessedGoodService {
 	@Autowired
@@ -17,7 +21,7 @@ public class ProcessedGoodService {
 	public ResponseEntity<ResponseStructure<ProcessedGood>> savePgood(ProcessedGood pgood ){
 		ResponseStructure<ProcessedGood> responseStructure = new ResponseStructure<>();
 		responseStructure.setData(dao.addprocessedgood(pgood));
-		responseStructure.setMessage("warehouse saved success");
+		responseStructure.setMessage("good saved success");
 		responseStructure.setStatus(HttpStatus.CREATED.value());
 		return new ResponseEntity<ResponseStructure<ProcessedGood>>(responseStructure,HttpStatus.CREATED);
 	}
@@ -60,6 +64,34 @@ public class ProcessedGoodService {
 		else {
 			throw new IdNotFoundException("processed good id not found");
 		}
+	}
+	
+	public ResponseEntity<ResponseStructure<ProcessedGood>> findProcessedGoodByName(String name){
+		ProcessedGood good = dao.findByName(name);
+		if(good!=null) {
+			ResponseStructure<ProcessedGood> structure = new ResponseStructure<>();
+			structure.setData(good);
+			structure.setMessage("ProcessedGood found");
+			structure.setStatus(HttpStatus.FOUND.value());
+			return new ResponseEntity<ResponseStructure<ProcessedGood>>(structure,HttpStatus.FOUND);
+		}
+		else {
+			throw new ProcessedGoodNotFoundByName("ProcessedGood not found by name");
+		}
+	}
+	public ResponseEntity<ResponseStructure<List<ProcessedGood>>> getAllGood(){
+		List<ProcessedGood> goods = dao.getAllGoods();
+		
+		if(goods!=null) {
+			ResponseStructure<List<ProcessedGood>> structure = new ResponseStructure<>();
+			structure.setData(goods);
+			structure.setMessage("goods found");
+			structure.setStatus(HttpStatus.FOUND.value());
+		
+			return new ResponseEntity<ResponseStructure<List<ProcessedGood>>>(structure,HttpStatus.FOUND);
+		}
+		throw new ProcessedGoodsNotFound("no goods exists");
+				
 	}
 	
 }

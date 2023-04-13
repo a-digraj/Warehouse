@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tyss.warehouse.boot.warehouse.entity.Cart;
 import com.tyss.warehouse.boot.warehouse.entity.User;
 import com.tyss.warehouse.boot.warehouse.repo.UserRepo;
 
@@ -46,6 +47,24 @@ public class UserDao {
 			return users;
 		}
 		return null;
+	}
+	public User findUserByName(String name) {
+		User user = repo.findUserByName(name);
+		if(user!=null) {
+			return user;
+		}else {
+			return null;
+		}
+	}
+	
+	public Cart deleteCartFromUser(int userId) {
+		User user = findUserById(userId);
+			if(user!=null) {
+				return deleteUserById(userId).getCart();
+			}
+			else {
+				return null;
+			}
 	}
 	 
 	

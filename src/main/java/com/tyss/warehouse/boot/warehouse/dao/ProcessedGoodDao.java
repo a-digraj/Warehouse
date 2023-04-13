@@ -1,5 +1,6 @@
 package com.tyss.warehouse.boot.warehouse.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ProcessedGoodDao {
 	public ProcessedGood updateprocessedgood(ProcessedGood processedgood, int id) {
 		Optional<ProcessedGood> processedgood2 = repo.findById(id);
 		if(processedgood2.isPresent()) {
-			processedgood.setPgoodId(id);
+			processedgood.setProcessedGoodId(id);
 			return repo.save(processedgood);
 		}
 		return null;
@@ -37,6 +38,27 @@ public class ProcessedGoodDao {
 			return processedgood.get();
 		}
 		return null;
+	}
+	
+	public ProcessedGood findByName(String name) {
+		ProcessedGood good = repo.findProcessedGoodByName(name);
+		if(good!=null) {
+			return good;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public List<ProcessedGood> getAllGoods(){
+		List<ProcessedGood> goods = repo.findAll();
+		if(goods!=null) {
+			return goods;
+		}
+		else {
+			return null;
+		}
+	
 	}
 	
 	

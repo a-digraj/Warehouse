@@ -4,21 +4,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import lombok.Data;
 
 @Entity
 public class Grocery {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int gId;
-	@NotEmpty(message = "processed good name cannot be empty")
-	private String gName;
-	@NotNull(message = "best before must be provided")
-	private String gBestBefore;
+	@NotNull(message = "grocery name cannot be null")
+	@NotBlank(message = "grocery name cannot be empty")
+	private String groceryName;
+	@NotNull(message = "grocery name cannot be null")
+	@NotBlank(message = "grocery best before must be provided")
+	private String gcoceryBestBefore;
 	@Positive(message = "Value must be positive")
-	private double price;
+	private double groceryPrice;
 	@Positive(message = "Value must be positive")
 	private int quantity;
 	public int getgId() {
@@ -27,23 +31,23 @@ public class Grocery {
 	public void setgId(int gId) {
 		this.gId = gId;
 	}
-	public String getgName() {
-		return gName;
+	public String getGroceryName() {
+		return groceryName;
 	}
-	public void setgName(String gName) {
-		this.gName = gName;
+	public void setGroceryName(String groceryName) {
+		this.groceryName = groceryName;
 	}
-	public String getgBestBefore() {
-		return gBestBefore;
+	public String getGcoceryBestBefore() {
+		return gcoceryBestBefore;
 	}
-	public void setgBestBefore(String gBestBefore) {
-		this.gBestBefore = gBestBefore;
+	public void setGcoceryBestBefore(String gcoceryBestBefore) {
+		this.gcoceryBestBefore = gcoceryBestBefore;
 	}
-	public double getPrice() {
-		return price;
+	public double getGroceryPrice() {
+		return groceryPrice;
 	}
-	public void setPrice(double price) {
-		this.price = price;
+	public void setGroceryPrice(double groceryPrice) {
+		this.groceryPrice = groceryPrice;
 	}
 	public int getQuantity() {
 		return quantity;
@@ -51,8 +55,6 @@ public class Grocery {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	
-	
-	
+
 	
 }
