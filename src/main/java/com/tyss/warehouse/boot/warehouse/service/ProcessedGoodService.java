@@ -90,8 +90,19 @@ public class ProcessedGoodService {
 		
 			return new ResponseEntity<ResponseStructure<List<ProcessedGood>>>(structure,HttpStatus.FOUND);
 		}
-		throw new ProcessedGoodsNotFound("no goods exists");
-				
+		throw new ProcessedGoodsNotFound("no goods exists");		
+	}
+	public ResponseEntity<ResponseStructure<List<ProcessedGood>>> expiredGoods(){
+		List<ProcessedGood> expiredItems= dao.expiredItems();
+		if(expiredItems!=null) {
+			ResponseStructure<List<ProcessedGood>> structure = new ResponseStructure<>();
+			structure.setData(expiredItems);
+			structure.setMessage("expired itemds found");
+			structure.setStatus(HttpStatus.FOUND.value());
+			
+			return new ResponseEntity<ResponseStructure<List<ProcessedGood>>>(structure, HttpStatus.FOUND);			
+		}
+		throw new ProcessedGoodsNotFound("mo expired itemds found");
 	}
 	
 }

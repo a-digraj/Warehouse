@@ -56,12 +56,25 @@ public class ProcessedGoodController {
 	public ResponseEntity<ResponseStructure<ProcessedGood>> deletepGood(@RequestParam int processedgoodid){
 		return service.deletePgood(processedgoodid);
 	}
+	@ApiOperation(value = "find processedgood by name", notes = "API is used to find processedgood by name")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
+			@ApiResponse(code = 400, message = "processed good not found for the given name") })
 	@GetMapping("/getbyname")
-	public ResponseEntity<ResponseStructure<ProcessedGood>> findProcessedGoodByName(@RequestParam String ProcessedGoodName){
+	public ResponseEntity<ResponseStructure<ProcessedGood>> findProcessedGoodByName(@Valid @RequestParam String ProcessedGoodName){
 		return service.findProcessedGoodByName(ProcessedGoodName);
 	}
+	@ApiOperation(value = "find all processedgood", notes = "API is used to find all processedgood")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
+			@ApiResponse(code = 400, message = "no items found") })
 	@GetMapping("/getall")
 	public ResponseEntity<ResponseStructure<List<ProcessedGood>>> getAllGoods(){
 		return service.getAllGood();
+	}
+	@ApiOperation(value = "find all expired processedgood", notes = "API is used to find expired processedgood")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
+			@ApiResponse(code = 400, message = "no expired items found") })
+	@GetMapping("/expired")
+	public ResponseEntity<ResponseStructure<List<ProcessedGood>>> getallExpiredItems(){
+		return service.expiredGoods();
 	}
 }

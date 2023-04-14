@@ -53,6 +53,20 @@ public class WarehouseController {
 	public ResponseEntity<ResponseStructure<Warehouse>> deleteWarehouse(@RequestParam int warehouseid){
 		return service.deleteWarehouse(warehouseid);
 	}
+	@ApiOperation(value = "add processed good to warehouse", notes = "API is used to add processed good to warehouse")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully added"),
+			@ApiResponse(code = 400, message = "Id not found for the given  warehouse or good") })
+	@PutMapping("/processedgood")
+	public ResponseEntity<ResponseStructure<Warehouse>> addprocessedGoodToWarehouse(@RequestParam int warehouseid,@RequestParam int processedGoodId){
+		return service.addProcessedGoodToWarehouse(warehouseid,processedGoodId);
+	}
+	@ApiOperation(value = "add grocery good to warehouse", notes = "API is used to add grocery good to warehouse")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully added"),
+			@ApiResponse(code = 400, message = "Id not found for the given  warehouse or grocery") })
+	@PutMapping("/grocery")
+	public ResponseEntity<ResponseStructure<Warehouse>> addGroceryToWarehouse(@RequestParam int warehouseid,@RequestParam int groceryid){
+		return service.addGroceryToWarehouse(warehouseid, groceryid);
+	}
 	
 	
 	

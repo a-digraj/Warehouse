@@ -22,7 +22,7 @@ public class ApplicationConfig {
 		{
 			 Contact contact = new Contact("TestYantra", "www.testyantra-warehouse.com", "testyantra@gmail.com");
 			List<VendorExtension> extensions = new ArrayList<>();
-			ApiInfo apiInfo = new ApiInfo("Warehouse Track", "Warehouse goods tracker", "1.0", "3 months of free service",
+			ApiInfo apiInfo = new ApiInfo("Warehouse Track", "Warehouse goods tracker", "1.2", "3 months of free service",
 					contact, "www.testyantra.com", "www.testyantra-warehouse.com", extensions);
 			return new Docket(DocumentationType.SWAGGER_2).select()
 					.apis(RequestHandlerSelectors.basePackage("com.tyss.warehouse.boot.warehouse")).build()

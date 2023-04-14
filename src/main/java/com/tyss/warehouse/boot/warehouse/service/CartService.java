@@ -103,9 +103,9 @@ public class CartService {
 			return new ResponseEntity<ResponseStructure<Cart>>(responseStructure, HttpStatus.NOT_FOUND);
 		}
 	}
-	public ResponseEntity<ResponseStructure<Cart>> addGroceryToCart(int cartId,int groceryId){
+	public ResponseEntity<ResponseStructure<Cart>> addGroceryToCart(int cartId,int groceryId,int groceryQuantity){
 		ResponseStructure<Cart> structure= new ResponseStructure<>();
-		Cart cart = dao.addGroceryToCart(groceryId, cartId);
+		Cart cart = dao.addGroceryToCart(groceryId, cartId,groceryQuantity);
 		if(cart!=null) {
 			structure.setData(cart);
 			structure.setMessage("grocery added to cart");
@@ -133,5 +133,35 @@ public class CartService {
 			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	public ResponseEntity<ResponseStructure<Cart>> deleteGroceryByName(int cartId, String groceryName){
+		ResponseStructure<Cart> structure = new ResponseStructure<>();
+		Cart cart = dao.deleteGroceryByName(cartId, groceryName);
+		if(cart!=null) {
+			structure.setData(cart);
+			structure.setMessage("grocery found and deleted from cart success");
+			structure.setStatus(HttpStatus.OK.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.OK);
+		}else {
+			structure.setMessage("cart or grocery not found");
+			structure.setStatus(HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.NOT_FOUND);
+		}
+	}
+	public ResponseEntity<ResponseStructure<Cart>> deleteProcessedGoodByName(int cartId, String processedGoodName){
+		ResponseStructure<Cart> structure = new ResponseStructure<>();
+		Cart cart = dao.deleteProcessedGoodByName(cartId, processedGoodName);
+		if(cart!=null) {
+			structure.setData(cart);
+			structure.setMessage("processed good found and deleted from cart success");
+			structure.setStatus(HttpStatus.OK.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.OK);
+		}else {
+			structure.setMessage("cart or good not found");
+			structure.setStatus(HttpStatus.NOT_FOUND.value());
+			return new ResponseEntity<ResponseStructure<Cart>>(structure,HttpStatus.NOT_FOUND);
+		}
+	}
+	
 
 }

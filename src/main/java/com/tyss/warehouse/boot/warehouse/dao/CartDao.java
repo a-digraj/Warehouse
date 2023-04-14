@@ -13,6 +13,7 @@ import com.tyss.warehouse.boot.warehouse.entity.ProcessedGood;
 import com.tyss.warehouse.boot.warehouse.repo.CartRepo;
 import com.tyss.warehouse.boot.warehouse.repo.GroceryRepo;
 import com.tyss.warehouse.boot.warehouse.repo.ProcessedGoodRepo;
+import com.tyss.warehouse.boot.warehouse.repo.WarehouseRepo;
 
 @Repository
 public class CartDao {
@@ -22,6 +23,8 @@ public class CartDao {
 	private GroceryRepo groceryRepo;
 	@Autowired
 	private ProcessedGoodRepo processedGoodRepo;
+	@Autowired
+	private GroceryDao gdao;
 
 	public Cart addCart(Cart cart) {
 		return repo.save(cart);
@@ -58,21 +61,20 @@ public class CartDao {
 //		
 //	}
 
-	public Cart addGroceryToCart(int groceryid, int cartId) {
+	public Cart addGroceryToCart(int groceryid, int cartId,int groceryQuantity) {
 		Optional<Cart> cart = repo.findById(cartId);
 		Optional<Grocery> grocery = groceryRepo.findById(groceryid);
 		
-//		if(cart.isPresent() && grocery.isPresent()) {
-//			System.out.println(cart.get() +"  "+ grocery.get());
-//			cart.get().getGroceries().add(grocery.get());
-//			return updateCart(cart.get(), cartId);
-//		}
+		
+
 		
 		if (cart.isPresent() && grocery.isPresent()) {
 			Cart cart2 = cart.get();
 			Grocery grocery2 = grocery.get();
+
 			if (cart2.getGroceries() != null) {
 				cart2.getGroceries().add(grocery2);
+				
 			} else {
 				List<Grocery> groceries = Arrays.asList(grocery2);
 				cart2.setGroceries(groceries);
@@ -99,5 +101,33 @@ public class CartDao {
 			return updateCart(cart2, cartId);
 		} else
 			return null;
+	}
+	public Cart deleteGroceryByName(int cartId, String groceryName) {
+		Cart cart = repo.findById(cartId).get();
+		Grocery grocery = groceryRepo.findGroceryByName(groceryName);
+		List<Grocery> groceries = cart.getGroceries();
+		if(cart!=null && grocery!=null && groceries!=null) {
+		groceries.remove(grocery);
+		cart.setGroceries(groceries);
+		cart.setCartId(cartId);
+		return repo.save(cart);
+		}
+		else {
+			return null;
+		}
+	}
+	public Cart deleteProcessedGoodByName(int cartId, String processedGoodName) {
+		Cart cart = repo.findById(cartId).get();
+		ProcessedGood good = processedGoodRepo.findProcessedGoodByName(processedGoodName);
+		List<ProcessedGood> goods = cart.getProcessedGoods();
+		if(cart!=null && good!=null && goods!=null) {
+		goods.remove(good);
+		cart.setProcessedGoods(goods);
+		cart.setCartId(cartId);
+		return repo.save(cart);
+		}
+		else {
+			return null;
+		}
 	}
 }

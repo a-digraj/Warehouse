@@ -22,7 +22,8 @@ public class WarehouseService {
 	public ResponseEntity<ResponseStructure<Warehouse>> saveWarehouse(Warehouse warehouse){
 		
 		long warehousenum = repo.warehouseCount();
-		if(warehousenum<0) {
+//		System.out.println("-=-=-=-=="+warehousenum+"-=-=-=-==-");
+		if(warehousenum<1) {
 		
 		ResponseStructure<Warehouse> responseStructure = new ResponseStructure<>();
 		responseStructure.setData(dao.addWarehouse(warehouse));
@@ -83,6 +84,19 @@ public class WarehouseService {
 			ResponseStructure<Warehouse> responseStructure = new ResponseStructure<>();
 			responseStructure.setData(warehouse);
 			responseStructure.setMessage("grocery has been added");
+			responseStructure.setStatus(HttpStatus.OK.value());
+			return new ResponseEntity<ResponseStructure<Warehouse>>(responseStructure,HttpStatus.OK);
+		}
+		else {
+			throw new IdNotFoundException("warehouse not found");
+		}
+	}
+	public ResponseEntity<ResponseStructure<Warehouse>> addProcessedGoodToWarehouse(int warehouseid,int processedGoodId){
+		Warehouse warehouse = dao.addProcessedGoodToWarehouse(warehouseid, processedGoodId);
+		if(warehouse!=null) {
+			ResponseStructure<Warehouse> responseStructure = new ResponseStructure<>();
+			responseStructure.setData(warehouse);
+			responseStructure.setMessage("processed goods  has been added");
 			responseStructure.setStatus(HttpStatus.OK.value());
 			return new ResponseEntity<ResponseStructure<Warehouse>>(responseStructure,HttpStatus.OK);
 		}

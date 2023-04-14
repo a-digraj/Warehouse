@@ -1,5 +1,7 @@
 package com.tyss.warehouse.boot.warehouse.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ public class GroceryController {
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully updated"),
 			@ApiResponse(code = 400, message = "Id not found for the given grocery ID") })
 	@PutMapping
-	public ResponseEntity<ResponseStructure<Grocery>> updateGrocery(@Valid  @RequestBody Grocery grocery,
+	public ResponseEntity<ResponseStructure<Grocery>> updateGrocery(@Valid @RequestBody Grocery grocery,
 			@RequestParam int groceryid) {
 		return service.updateGrocery(grocery, groceryid);
 				
@@ -50,7 +52,7 @@ public class GroceryController {
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
 			@ApiResponse(code = 400, message = "Id not found for the given grocery ID") })
 	@GetMapping
-	public ResponseEntity<ResponseStructure<Grocery>> findGrocery(@RequestParam int groceryid) {
+	public ResponseEntity<ResponseStructure<Grocery>> findGrocery( @RequestParam int groceryid) {
 		return service.findGrocery(groceryid);
 	}
 
@@ -61,9 +63,19 @@ public class GroceryController {
 	public ResponseEntity<ResponseStructure<Grocery>> deleteGrocery(@RequestParam int groceryid) {
 		return service.deleteGrocery(groceryid);
 	}
+	@ApiOperation(value = "find grocery by name", notes = "API is used to find grocery")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
+			@ApiResponse(code = 400, message = "name not found for the given grocery") })
 	@GetMapping("/name")
-	public ResponseEntity<ResponseStructure<Grocery>> findGroceryByName(@RequestParam String groceryname){
+	public ResponseEntity<ResponseStructure<Grocery>> findGroceryByName(@Valid @RequestParam String groceryname){
 		return service.findGroceryByAdmin(groceryname);
+	}
+	@ApiOperation(value = "find groceries", notes = "API is used to find all grocery")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully found"),
+			@ApiResponse(code = 400, message = "no groceries found") })
+	@GetMapping("/getall")
+	public ResponseEntity<ResponseStructure<List<Grocery>>> findAllGrocery(){
+		return service.findAllGrocery();
 	}
 
 }

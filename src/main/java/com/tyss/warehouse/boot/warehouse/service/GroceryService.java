@@ -1,5 +1,7 @@
 package com.tyss.warehouse.boot.warehouse.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import com.tyss.warehouse.boot.warehouse.entity.Grocery;
 import com.tyss.warehouse.boot.warehouse.exception.GroceryAlreadyPresent;
 import com.tyss.warehouse.boot.warehouse.exception.GroceryNotFoundByName;
 import com.tyss.warehouse.boot.warehouse.exception.IdNotFoundException;
+import com.tyss.warehouse.boot.warehouse.exception.NoGroceryFoundException;
 
 @Service
 public class GroceryService {
@@ -83,5 +86,18 @@ public class GroceryService {
 			return new ResponseEntity<ResponseStructure<Grocery>>(structure,HttpStatus.FOUND);
 		}
 		else throw new GroceryNotFoundByName("grocery with name not found");
+	}
+	public ResponseEntity<ResponseStructure<List<Grocery>>> findAllGrocery(){
+		List<Grocery> groceries = dao.findAllGrocery();
+		ResponseStructure<List<Grocery>> structure = new ResponseStructure<>();
+		if(groceries!=null) {
+			structure.setData(groceries);
+			structure.setMessage("groceries found");
+			structure.setStatus(HttpStatus.FOUND.value());
+			return new ResponseEntity<ResponseStructure<List<Grocery>>>(structure,HttpStatus.FOUND);
+		}
+		else {
+			throw new NoGroceryFoundException("no groceries found");
+		}
 	}
 }

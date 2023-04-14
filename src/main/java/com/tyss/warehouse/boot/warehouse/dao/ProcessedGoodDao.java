@@ -1,5 +1,7 @@
 package com.tyss.warehouse.boot.warehouse.dao;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,7 +60,23 @@ public class ProcessedGoodDao {
 		else {
 			return null;
 		}
+	}
 	
+	public List<ProcessedGood> expiredItems(){
+		List<ProcessedGood> goods = repo.findAll();
+		List<ProcessedGood> expiredGoods = new ArrayList<>();
+		for(ProcessedGood p :goods) {
+			LocalDate presentdate = LocalDate.now();
+			LocalDate goodsDate = p.getProcessedGoodExpDate();
+			int result = goodsDate.compareTo(presentdate);
+			if(result<0) {
+				expiredGoods.add(p);
+			}
+		}
+		if(expiredGoods!=null) {
+			return expiredGoods;
+		}
+		return null;
 	}
 	
 	

@@ -1,7 +1,5 @@
 package com.tyss.warehouse.boot.warehouse.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tyss.warehouse.boot.warehouse.config.ResponseStructure;
 import com.tyss.warehouse.boot.warehouse.dto.AdminDto;
-import com.tyss.warehouse.boot.warehouse.dto.UserDto;
 import com.tyss.warehouse.boot.warehouse.entity.Admin;
 import com.tyss.warehouse.boot.warehouse.service.AdminService;
 

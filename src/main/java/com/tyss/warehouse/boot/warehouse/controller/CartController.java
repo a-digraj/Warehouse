@@ -54,12 +54,32 @@ public class CartController {
 	public ResponseEntity<ResponseStructure<Cart>> deleteCart(@RequestParam int cartid){
 		return service.deleteCart(cartid);
 	}
+	@ApiOperation(value = "add grocery to cart", notes = "API is used to add grocery to existing cart")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully added"),
+			@ApiResponse(code = 400, message = "Id not found for the given cart ID or grocery id") })
 	@PutMapping("/addgrocery")
-	public ResponseEntity<ResponseStructure<Cart>> addGroceryToCart(@RequestParam int cartid,@RequestParam int groceryid){
-		return service.addGroceryToCart(cartid, groceryid);
+	public ResponseEntity<ResponseStructure<Cart>> addGroceryToCart(@RequestParam int cartid,@RequestParam int groceryid,@RequestParam int groceryquant){
+		return service.addGroceryToCart(cartid, groceryid,groceryquant);
 	}
+	@ApiOperation(value = "add processed good to cart", notes = "API is used to add processed good to existing cart")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully added"),
+			@ApiResponse(code = 400, message = "Id not found for the given cart ID or processed product id") })
 	@PutMapping("/addprogoods")
 	public ResponseEntity<ResponseStructure<Cart>> addProcessedGoodsToCart(@RequestParam int cartid,@RequestParam int processedgoodid){
 		return service.addProcesseddGoodToCart(cartid, processedgoodid);
+	}
+	@ApiOperation(value = "delete grocery from cart", notes = "API is used to delete grocery from existing cart")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully removed"),
+			@ApiResponse(code = 400, message = "Id not found for the given cart ID or grocery id") })
+	@DeleteMapping("/deletegrocery")
+	public ResponseEntity<ResponseStructure<Cart>> deleteGroceryByName(@RequestParam int cartid,@Valid @RequestParam String groceryname){
+		return service.deleteGroceryByName(cartid, groceryname);
+	}
+	@ApiOperation(value = "delete processed good from cart", notes = "API is used to delete processed good from existing cart")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully removed"),
+			@ApiResponse(code = 400, message = "Id not found for the given cart ID or processed product id") })
+	@DeleteMapping("/deletepgood")
+	public ResponseEntity<ResponseStructure<Cart>> deleteProcessedGoodByName(@RequestParam int cartid,@Valid @RequestParam String pgoodname){
+		return service.deleteProcessedGoodByName(cartid, pgoodname);
 	}
 }

@@ -65,6 +65,9 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<List<UserDto>>> getAllUser(){
 		return service.findAllUsers();
 	}
+	@ApiOperation(value = "delete cart", notes = "API is used to delete cart")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "succesfully deleted"),
+			@ApiResponse(code = 400, message = "cart not found") })
 	@DeleteMapping("/deletecart")
 	public ResponseEntity<ResponseStructure<Cart>> deleteCartFromUser(@RequestParam int userid){
 		return service.deleteCartFromUser(userid);

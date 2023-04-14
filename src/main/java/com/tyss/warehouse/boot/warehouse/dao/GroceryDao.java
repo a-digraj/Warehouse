@@ -1,5 +1,6 @@
 package com.tyss.warehouse.boot.warehouse.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,4 +56,14 @@ public class GroceryDao {
 			return null;
 		}
 	}
+	public List<Grocery> findAllGrocery(){
+		List<Grocery> groceries = repo.findAll();
+		if(groceries!=null) {
+			return groceries;
+		}
+		else {
+			return null;
+		}
+	}
+	
 }
